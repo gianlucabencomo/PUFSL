@@ -28,4 +28,17 @@ permits.
 The plan as of right now is to work directly with the PCBA, Tox21, ToxCast, and MUV CSV files kindly provided by 
 MolNet and code a featurizer to convert the SMILES strings into graph ConvNets compatiable with Pytorch.  Then,
 I can train a prototypical network!
- 
+
+03.12.2022
+I am getting a much better idea of how the implementation will go. I am almost done with featurizing my 
+smile strings as such that they are represented by graphs and compatitble with pytorch.  I will be using 
+the pytorch geometric library to do most of the modeling and heavy lifting.
+
+03.12.2022
+I have pretty much completed all the code neccessary to take SMILES strings and their respective labels and 
+convert that into graph data with associated labels.  The form is compatiable with pytorch.  There is one small
+snag, however.  I keep getting a "zsh: segmentation fault  python" error that is preventing me from testing my
+code and making sure that it is good to go.  Regardless, I have been substaintial progress and think I am at a 
+good stopping point for now.  After I make sure that all the data handling works, it will be very easy to train
+a graph conv net with GAT/GCN layers and try to get a strong model for each task individually.  I can get into
+prototypically networks shortly after. 
