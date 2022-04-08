@@ -1,20 +1,27 @@
 import time
 import click
 import torch
-import deepchem as dc
 import numpy as np
-from data import load_data
-from deepchem.models import GATModel, GCNModel, AttentiveFPModel
 
+from torch.nn import Linear
+import torch.nn.functional as F
+from torch_geometric.nn import GCNConv
+from torch_geometric.nn import global_mean_pool
+from torch_geometric.loader import DataLoader
+
+from data import *
 
 # this script is intended to run all the features of the deepchem library used in this project, 
 # without any fancy parlor tricks. 
 
+
 @click.command()
 @click.option('-d', '--dataset',
-        type=click.Choice(['tox21', 'pcba', 'toxcast', 'muv']),
+        type=click.Choice(['tox21', 'pcba', 'toxcast_dataset', 'muv']),
         required=True,
         help='Dataset to train model on.')
+@click.option('-t', '--task', default=0, 
+        help='Task to train on.')
 @click.option('-m', '--model',
         type=click.Choice(['GAT', 'GCN', 'AFP']),
         required=True,
@@ -29,62 +36,90 @@ from deepchem.models import GATModel, GCNModel, AttentiveFPModel
         help='Weight decay.')
 @click.option('-s', '--seed', default=np.random.randint(10000),
         help='Seed for train/test split.')
-@click.option('-u', '--use_edges', default=True,
-        help='Use edges in molecular graph.')
+@click.option('-uc', '--use_chirality', is_flag=True,
+        help='Include chirality in the feature vector.')
+@click.option('-hi', '--hydrogens_implicit', is_flag=True,
+        help='Treat hydrogens implicitly when generating the feature vector (recommended).')
+@click.option('-us', '--use_stereochemistry', is_flag=True,
+        help='Include stereochemistry info when generating the bond feature vectors.')
 @click.option('-sp', '--save_path', 
         required=True,
         help='Specify the save path to which models/results should be saved.')
 
+
 def simple( dataset: str,
+            task: int,
             model: str,
             epochs: int,
             learning_rate: float,
             weight_decay: float,
             batch_size: int,
-            use_edges: bool,
+            use_chirality: bool, # not being used right now
+            hydrogens_implicit: bool, # not being used right now
+            use_stereochemistry: bool, # not being used right now
             seed: int,
-            save_path: str):
-            
+            save_path: str,
+            transform = None, # change later ... keeping None for now for simplicity
+            pre_transform = None, # change later ... keeping None for now for simplicity
+            pre_filter = None): # change later ... keeping None for now for simplicity
+    
     # device configuration
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
-    # featurizer setup
-    featurizer = dc.feat.MolGraphConvFeaturizer(use_edges=use_edges)
 
-    # configure spliter
-    splitter = dc.splits.RandomSplitter()
+    dataset = MoleculeNet(root=os.path.join(os.getcwd(), 'data'), name=dataset, 
+                        transform=transform, pre_transform=pre_transform, pre_filter=pre_filter)
 
-    # load data
-    START = time.time()
-    transformers, train, valid, test = load_data(dataset, featurizer, splitter)
-    print(f'Loading complete. Load time: {(time.time() - START):.3f} s')
-
-    # set metric for evaluating the validation set
-    metric = dc.metrics.Metric(dc.metrics.roc_auc_score)
-
-    n_tasks = len(train.tasks)
-
-    if learning_rate != 0.0:
-        learning_rate = dc.models.optimizers.ExponentialDecay(learning_rate, 0.9, 1000)
-    
-    if model == "GAT":
-        model = GATModel(mode='classification', n_tasks=n_tasks, batch_size=batch_size, 
-                            learning_rate=learning_rate, device=device, model_dir=save_path)
-    elif model == "GCN":
-        model = GCNModel(mode='classification', n_tasks=n_tasks, batch_size=batch_size, 
-                            learning_rate=learning_rate, device=device, model_dir=save_path)   
-    else:
-        model = AttentiveFPModel(mode='classification', n_tasks=n_tasks, batch_size=batch_size, 
-                            learning_rate=learning_rate, device=device, model_dir=save_path)
-    
-    callback = dc.models.ValidationCallback(valid, 1000, metric)
-    
-    print('Model loaded.  Beginning to train...')
-    START = time.time()
-    loss = model.fit(train, nb_epoch=epochs, callbacks=callback)
-    print(f'Training complete. Train time: {(time.time() - START):.3f} s')
+    print()
+    print(f'Dataset: {dataset.name}')
+    print('====================')
+    print(f'Number of graphs (compounds): {len(dataset)}')
+    print(f'Number of features per atom: {dataset.num_features}')
+    print(f'Number of features per bond: {dataset.num_edge_features}')
+    print(f'Number of tasks: {dataset.num_classes}') 
+    print(f'Average number of atoms per molecule: {len(dataset.data.x) / len(dataset):.2f}')
+    print(f'Average number of bonds per molecule: {len(dataset.data.edge_attr) / len(dataset):.2f}')
     
     
+    data = dataset[0]  # Get the first graph object.
 
+    print()
+    print(data)
+    print('=============================================================')
+
+    # Gather some statistics about the first graph.
+    print(f'Number of nodes: {data.num_nodes}')
+    print(f'Number of edges: {data.num_edges}')
+    print(f'Average node degree: {data.num_edges / data.num_nodes:.2f}')
+    print(f'Has isolated nodes: {data.has_isolated_nodes()}')
+    print(f'Has self-loops: {data.has_self_loops()}')
+    print(f'Is undirected: {data.is_undirected()}')
+
+    assert 0 <= task and task < dataset.num_classes, f'Selected task is out of range (0 <= task < {dataset.num_classes})'
+    dataset.data.y = dataset.data.y[:,task]
+    
+    # shuffle dataset
+    dataset = dataset.shuffle()  
+
+    # train / val / test split
+    factor = int(0.1 * len(dataset))
+
+    train = dataset[:factor*8]
+    valid = dataset[factor*8:factor*9]
+    test = dataset[factor*9:]
+    
+    print()
+    print(f'Selected Task: {task}')
+    print('=============================================================')
+    print(f'Number of training graphs: {len(train)}')
+    print(f'Number of validation graphs: {len(valid)}')
+    print(f'Number of test graphs: {len(test)}')       
+
+    train_loader = DataLoader(train, batch_size=64, shuffle=True)
+    valid_loader = DataLoader(valid, batch_size=64, shuffle=True)
+    test_loader = DataLoader(test, batch_size=64, shuffle=False)    
+    
+    # TODO: implement training + eval
+   
 if __name__ == "__main__":
     simple()
