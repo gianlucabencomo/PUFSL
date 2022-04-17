@@ -14,5 +14,24 @@ def get_config():
     parser.add_argument('-dp', '--data_path', type=str,
                         default=os.path.join(os.getcwd(), 'data'), 
                         help='Data path to save to.') 
-    
+    parser.add_argument('-lr', '--learning_rate', type=float,
+                        default=0.001,
+                        help='Learning rate, default=0.001.')    
+    parser.add_argument('-lrS', '--lr_scheduler_step',
+                        type=int,
+                        help='StepLR learning rate scheduler step, default=20',
+                        default=20)
+
+    parser.add_argument('-lrG', '--lr_scheduler_gamma',
+                        type=float,
+                        help='StepLR learning rate scheduler gamma, default=0.5',
+                        default=0.5)
+    parser.add_argument('-exp', '--experiment_root',
+                        type=str,
+                        help='Root where to store models, losses and accuracies',
+                        default='output')    
+    parser.add_argument('-ep', '--epochs',
+                        type=int,
+                        help='Number of epochs to train for, default=100.',
+                        default=100) 
     return parser

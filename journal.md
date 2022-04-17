@@ -76,4 +76,28 @@ Since running and debugging these training episodes will take some time, I shoul
 as soon as possible.  Hopefully, I can put in another solid 10 hours this weekend and then finish up the rest
 of the implmentation in the week that follows. 
 
+04.16.2022
+Right now, featurizer.py is complete, data.py runs but there may be some bugs, config.py is well-organized, and
+main.py is coming along.  In data.py, I am successfully able to split the tasks into training and testing tasks.
+However, I am a little bit confused on how the nature of my embeddings should go and how I should run the train
+loop.  This is going to take me a pretty sizeable amount of time to figure out, and I am anticipating a ton of 
+bugs.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  

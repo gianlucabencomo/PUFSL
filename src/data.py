@@ -31,11 +31,10 @@ class MoleculeNet(InMemoryDataset):
                         slice(1, 618)],
             }
     
-    def __init__(self, root, name, mode, split, transform=None, 
+    def __init__(self, root, name, task, transform=None, 
                     pre_transform=None, pre_filter=None):
         self.name = name.lower()
-        self.mode = mode 
-        self.split = split # percentage 0 -> 1.0
+        self.task = task # task number
         assert self.name in self.names.keys()
         super().__init__(root, transform, pre_transform, pre_filter)
         self.data, self.slices = torch.load(self.processed_paths[0])     
@@ -54,7 +53,7 @@ class MoleculeNet(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        return self.mode + '_data.pt'
+        return str(self.task) + '_data.pt'
 
     def download(self):
         url = self.url.format(self.names[self.name][1])
@@ -88,6 +87,12 @@ class MoleculeNet(InMemoryDataset):
             y = y if isinstance(y, list) else [y]
             y = [float(i) if len(i) > 0 else float('NaN') for i in y]
             y = torch.tensor(y, dtype=torch.float).view(1, -1)
+            # task number selection 
+            y = y[:,self.task][0]
+
+            # do not process non entries
+            if torch.isnan(y):
+                continue
 
             # process nodes (x)
             x = []
@@ -122,12 +127,6 @@ class MoleculeNet(InMemoryDataset):
                 perm = (edge_index[0] * x.size(0) + edge_index[1]).argsort()
                 edge_index, edge_attr = edge_index[:, perm], edge_attr[perm]
             
-            # determine splitting for train/test
-            s = int(self.split * y.shape[1])
-            if self.mode == 'train':
-                y = y[:,:s]
-            else:
-                y = y[:,s:]
             
             data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=y,
                         smiles=smiles)
