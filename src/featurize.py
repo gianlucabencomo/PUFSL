@@ -9,7 +9,9 @@ import torch
 # Oxford Protein Informatics Group
 
 def one_hot_encoding(x: str, permitted: list):
-    
+    '''
+    Create one-hot encoding.
+    '''    
     # maps unrecognized values to the last element, which contains 'unknown'
     if x not in permitted:
         x = permitted[-1]
@@ -23,7 +25,15 @@ def one_hot_encoding(x: str, permitted: list):
 def get_atom_features(  atom, 
                         use_chirality: bool = True, 
                         hydrogens_implicit: bool = True):
-    
+    '''
+    Description: Creates a one-hot encoding for each node in the graph using rdkit.
+    Inputs:
+        atom - (rdkit) atom at node
+        use_chirality - (bool)
+        hydrogens_implicit - (bool, recommended to always be True)
+    Returns:
+        (list) one-hot encoding of all the features at every node
+    '''    
     # list of permitted atoms
     permitted_atoms = ['C','N','O','S','F','Si','P','Cl','Br','Mg','Na','Ca','Fe','As','Al',
                        'I', 'B','V','K','Tl','Yb','Sb','Sn','Ag','Pd','Co','Se','Ti','Zn', 
@@ -81,6 +91,14 @@ def get_atom_features(  atom,
 
 def get_bond_features(  bond, 
                         use_stereochemistry: bool = True):
+    '''
+    Description: one-hot encoding for each edge in the graph using rdkit.
+    Inputs:
+        bond - (rdkit) bond information at each edge
+        use_stereochemistry - (bool)
+    Returns:
+        (list) one-hot encoding of all the features at every edge
+    '''
       
     # permitted list of bonds
     permitted_bonds = [Chem.rdchem.BondType.SINGLE, Chem.rdchem.BondType.DOUBLE, 
