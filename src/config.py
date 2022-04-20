@@ -79,5 +79,13 @@ def get_config():
                         type=int,
                         help='Number of negative query examples',
                         default=10) 
+    parser.add_argument('-tpq', '--test_pos_query',
+                        type=int,
+                        help='Number of positive query examples to use during testing.',
+                        default=200)
+    parser.add_argument('-tnq', '--test_neg_query',
+                        type=int,
+                        help='Number of negative query examples to use during testing.',
+                        default=200)
 
     return parser

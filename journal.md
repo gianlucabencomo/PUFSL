@@ -83,21 +83,20 @@ However, I am a little bit confused on how the nature of my embeddings should go
 loop.  This is going to take me a pretty sizeable amount of time to figure out, and I am anticipating a ton of 
 bugs.  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
+04.19.2022
+I finished about 99% of the implementation!  I am now able to train/test few-shot models on any chemical/graphical
+dataset.  The work is not completely done, however.  I still need to 1) write the final paper, 2) prepare a final
+presentation, 3) create nice readme for the repository, 4) fix the loss function so I can accept support sets with
+different sizes of pos/neg, 5) consider having a random train/val/test split instead of a fixed one, 6) do a t-sne
+visualization of the embeddings as well as think about and implement other types of visualization, 7) optimize the 
+embedding function because, while it does work and leads to okay performance, it does not match the state of the art
+yet.  If I can optimize the embedding function as such that I signficantly improve accuracy, I could be well on my
+way to a publication, 8) do a simple random forests few-shot implementation so I have something to compare to, 9)
+any other improvements/modifcations to the code!
+Thankfully, I think I can start writing the final paper and complete 80% of it without having to code anything else.
+The parts of the paper I cannot yet complete are 1) model comparison (to random forests), 2) describing and detailing
+the architecture of the embedding function, because I have not finalized it yet, 3) results in general.  I can most
+certainly write the abstract in full, the introduction in full, the conclusion in full, methods up until the point
+where I describe the embedding function, and the results have to be empty for now.
+For figures and tables, I think I want: 1) diagram of prototypical networks from snell, 2) t-sne for results, 3) table
+with accuracies within a confidence interval for 10-shot, 5-shot, 3-shot, and 1-shot. 
