@@ -27,8 +27,10 @@ class MoleculeNet(InMemoryDataset):
                         slice(0, 17)],
         'tox21':    ['Tox21', 'tox21.csv.gz', -1,
                         slice(0, 12)],
-        'toxcast':  ['ToxCast', 'toxcast_data.csv.gz', 0, 
+        'toxcast_data':  ['ToxCast', 'toxcast_data.csv.gz', 0, 
                         slice(1, 618)],
+        'sider':    ['SIDER', 'sider.csv.gz', 0,
+                        slice(1, 28)],
             }
     
     def __init__(self, root, name, task, transform=None, 

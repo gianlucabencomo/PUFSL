@@ -5,7 +5,7 @@ import numpy as np
 def get_config():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dataset', type=str, 
-                        choices=['tox21', 'pcba', 'toxcast_dataset', 'muv'],
+                        choices=['tox21', 'pcba', 'toxcast_data', 'muv', 'sider'],
                         required=True,
                         help='Dataset to train/test on.')
     parser.add_argument('-s', '--seed', type=int, 

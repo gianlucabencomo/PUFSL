@@ -49,7 +49,7 @@ def train(config, train, val, model, optim, lr_scheduler):
         pos = config.pos_support + config.pos_query
         neg = config.neg_support + config.neg_query
         data = BatchSampler(train, pos, neg, config.iterations)
-        
+        print('=== Iterations/Epoch: {} ==='.format(len(data)))        
         model.train()
         for batch in data:    
             optim.zero_grad()
@@ -133,6 +133,8 @@ def test(config, test, model, n=20):
         neg = config.neg_support + config.test_neg_query
       
         data = BatchSampler(test, pos, neg, config.iterations)
+        
+        assert len(data) > 0, 'pos/neg test query set # might be too high! BatchSampler returned 0'
             
         model.eval()
         for batch in data:

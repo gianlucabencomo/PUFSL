@@ -99,4 +99,13 @@ the architecture of the embedding function, because I have not finalized it yet,
 certainly write the abstract in full, the introduction in full, the conclusion in full, methods up until the point
 where I describe the embedding function, and the results have to be empty for now.
 For figures and tables, I think I want: 1) diagram of prototypical networks from snell, 2) t-sne for results, 3) table
-with accuracies within a confidence interval for 10-shot, 5-shot, 3-shot, and 1-shot. 
+with accuracies within a confidence interval for 10-shot, 5-shot, 3-shot, and 1-shot.
+
+04.23.2022
+The architecture of the embedding function is something that needs to be optimized, but it can be saved for further
+exploration.  I will mention it in the conclusion.  I also need to fix the loss function so I can have support sets
+with different pos/neg.  That can also be saved for later.
+Right now, I need to 1) add the SIDER dataset so I can perform infences with tox21, muv, and SIDER for the report.
+2) do a simple random forests implemention for few-shot learning. 3) implement t-sne so we can visualize the
+embeddings.
+After that is done, I can write the report. 

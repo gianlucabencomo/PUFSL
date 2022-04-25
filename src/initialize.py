@@ -5,8 +5,9 @@ from data import *
 lengths =   {
             'tox21': 12,
             'pcba': 128,
-            'toxcast_dataset': 618,
+            'toxcast_data': 618,
             'muv': 17,
+            'sider': 28
             }
 
 def init_seed(seed):
