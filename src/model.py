@@ -4,6 +4,8 @@ import torch.nn.functional as F
 
 from torch_geometric.nn import GATConv, global_mean_pool 
 
+# embedding function
+
 class ProtoNet(torch.nn.Module):
     def __init__(self, in_channels, out_channels):
         super(ProtoNet, self).__init__()

@@ -36,7 +36,7 @@ def get_config():
                         default=100) 
     parser.add_argument('-it', '--iterations',
                         type=int,
-                        help='Number of iterations for each training episode/epoch.',
+                        help='Number of iterations for each training episode/epoch, default=<1000.',
                         default=1000)
     parser.add_argument('-trsp', '--tr_split',
                         type=float,
@@ -61,31 +61,31 @@ def get_config():
                         default=None)
     parser.add_argument('-oc', '--out_channels',
                         type=int,
-                        help='Number of channels in output of GNN.',
+                        help='Number of channels in output of GNN, default=65.',
                         default='65')
     parser.add_argument('-ps', '--pos_support',
                         type=int,
-                        help='Number of positive support examples',
+                        help='Number of positive support examples, default=10.',
                         default=10) 
     parser.add_argument('-pq', '--pos_query',
                         type=int, 
-                        help='Number of positive query examples',
+                        help='Number of positive query examples, default=10.',
                         default=10) 
     parser.add_argument('-ns', '--neg_support', 
                         type=int,
-                        help='Number of negative support examples',
+                        help='Number of negative support examples, default=10.',
                         default=10) 
     parser.add_argument('-nq', '--neg_query', 
                         type=int,
-                        help='Number of negative query examples',
+                        help='Number of negative query examples, default=10.',
                         default=10) 
     parser.add_argument('-tpq', '--test_pos_query',
                         type=int,
-                        help='Number of positive query examples to use during testing.',
+                        help='Number of positive query examples to use during testing, default=200.',
                         default=200)
     parser.add_argument('-tnq', '--test_neg_query',
                         type=int,
-                        help='Number of negative query examples to use during testing.',
+                        help='Number of negative query examples to use during testing, default=200.',
                         default=200)
 
     return parser

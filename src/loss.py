@@ -4,7 +4,7 @@ from torch.nn.modules import Module
 
 def euclidean_dist(x, y):
     '''
-    Compute euclidean distance between two tensors
+    Compute euclidean distance between two tensors.
     '''
     # x: N x D
     # y: M x D
@@ -35,28 +35,25 @@ def proto_loss(input, target, pos_support, neg_support):
     - n_support: number of samples to keep in account when computing
       barycentres, for each one of the current classes
     '''
-    target_cpu = target.to('cpu')
-    input_cpu = input.to('cpu') 
-
     # for now ... until i can fix the bugs
     n_support = pos_support
      
     def supp_idxs(c):
         # FIXME when torch will support where as np
-        return target_cpu.eq(c).nonzero()[:n_support].squeeze(1)
+        return target.eq(c).nonzero()[:n_support].squeeze(1)
 
     # FIXME when torch.unique will be available on cuda too
-    classes = torch.unique(target_cpu)
+    classes = torch.unique(target)
     n_classes = len(classes)
     # FIXME when torch will support where as np
     # assuming n_query, n_target constants
-    n_query = target_cpu.eq(classes[0].item()).sum().item() - n_support
+    n_query = target.eq(classes[0].item()).sum().item() - n_support
     support_idxs = list(map(supp_idxs, classes))
-    prototypes = torch.stack([input_cpu[idx_list].mean(0) for idx_list in support_idxs])
+    prototypes = torch.stack([input[idx_list].mean(0) for idx_list in support_idxs])
     # FIXME when torch will support where as np
-    query_idxs = torch.stack(list(map(lambda c: target_cpu.eq(c).nonzero()[n_support:], classes))).view(-1)
+    query_idxs = torch.stack(list(map(lambda c: target.eq(c).nonzero()[n_support:], classes))).view(-1)
 
-    query_samples = input.to('cpu')[query_idxs]
+    query_samples = input[query_idxs]
     dists = euclidean_dist(query_samples, prototypes)
 
     log_p_y = F.log_softmax(-dists, dim=1).view(n_classes, n_query, -1)

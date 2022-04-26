@@ -11,6 +11,17 @@ on a method to adapt, and 2) settle on datasets to work with.  Hopefully, I can 
 these two items set in stone.  My abstract, as it stands, contains a general idea of methods/datasets but I am
 uncertain as to whether or not I will stick to my currently written direction.
 
+02.14.2022
+Still reading a ton of papers and familiarizing myself with the course/material.  I have been playing around with
+some stuff like MAML and other techniques.
+
+02.17.2022
+I have been playing around with some example notebooks that are offered by the deepchem library.  I think the 
+deepchem people have done some cool work but the library itself seems to be poorly suited for ML folks. The whole
+thing is one big black box! There are some helpful features but I am undecided as to whether or not deepchem can
+be of use.  I think deepchem would be great if I was doing conventional out-of-the-box methods, but I am not. I
+will continue exploring.
+
 03.11.2022
 It has been some time since my last journal entry and commit.  Over the past week, I have done a substantial 
 amount of work.  I familiarized myself with the deepchem library, I wrote various wrapper functions to allow me
@@ -108,4 +119,24 @@ with different pos/neg.  That can also be saved for later.
 Right now, I need to 1) add the SIDER dataset so I can perform infences with tox21, muv, and SIDER for the report.
 2) do a simple random forests implemention for few-shot learning. 3) implement t-sne so we can visualize the
 embeddings.
-After that is done, I can write the report. 
+After that is done, I can write the report.
+
+04.25.2022
+I have decided that I will not be implementing any of the random forests or t-sne ideas for the purpose of this
+final report.  I have put in an insane amount of hours into this project, and believe I went well beyond the lower
+bound of work needed to get a 100% on the final report.  I successfully implemented several very tricky ideas and did
+a ton of testing with them.  I think the work that I did here is both interesting and meaningful, and my time would be 
+better spent studying new material / working on finals.  
+The report is almost done and I think it is shaping up quite nicely.  I did a ton of testing with two datasets (tox21,
+MUV) and acheived really good results.  While the implementation I currently have can be improved, I still think it is
+very clean and very good.  If I turn this project into a paper, there will be some more work that I will have to do that
+is going to be detailed in my final project report.  I will probably make two more entries after this one, and maybe clean
+up my code a little bit more, but for now I feel really good about the work I have done.
+
+04.26.2022
+Just made some very minor code adjustments and I think everything is ready for submission.  I am going to commit the code
+and leave ./src static until my project has been graded.  At some point over summer, I will revisit the repo and try to
+turn the project into something that is publishable, with a few minor adjustments and additions.
+The only other thing that I have to do after this next commit is finalize my final report and presentation slides.  I
+will add the document and slides to ./doc and I believe the project will be in perfect shape for submission there after.
+In addition, I will likely make 1-2 more journal entries.
