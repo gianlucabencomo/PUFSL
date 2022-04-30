@@ -140,3 +140,14 @@ turn the project into something that is publishable, with a few minor adjustment
 The only other thing that I have to do after this next commit is finalize my final report and presentation slides.  I
 will add the document and slides to ./doc and I believe the project will be in perfect shape for submission there after.
 In addition, I will likely make 1-2 more journal entries.
+
+04.30.2022
+I have been hard at work and believe this will be my final entry for this project and class. I just finalized my final paper
+and placed the tex files and pdf under ./doc.  I am almost done compiling my final presentation and I feel good about the
+work that I was able to do.  Of course, I still need to write a nice README and do some general housekeeping for the project
+that is completely outside of the scope of this course.  Additionally, I would like to eventually bring the project to a 
+publishable state, as I have said before.  Nonetheless, this will be my final entry because I am more of a handwritten 
+journal person and I would like to transition back to my physical research journal.
+...
+To Dr. Adji Bousso Dieng and the 513 TAs, thank you for a great semester, insightful lectures, and guidance on assignments
+and projects.
